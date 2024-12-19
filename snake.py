@@ -1,4 +1,4 @@
-# TODO: don't forget to pip install pygame in the terminal.  Else pygame functions won't be recognized.
+
 import pygame, random
 
 pygame.init()
@@ -40,7 +40,6 @@ def create_text_and_rect(text, color, background_color, **locations):
             rect.center = locations[location]
         if location == "topleft":
             rect.topleft = locations[location]
-    # TODO: add an if condition for "topleft" similar to the if condition for "center"
     return text, rect
 
 
@@ -95,6 +94,7 @@ def check_quit(event):
 
 def check_events():
     global running
+
     # TODO: create a for loop events is the variable pygame.event.get() is the list
         # TODO: call check_quit(event)
         # TODO: call move_snake(event)
@@ -105,6 +105,10 @@ def handle_snake():
     global head_x
     global head_y
     global head_coord
+    body_coords.insert(0, head_coord)
+    body_coords.pop()
+
+    head_coord = (head_x, head_y, Snake_Size, Snake_Size)
     # TODO: call body_coords.insert() method and pass in 0, head_coord
     # TODO: call body_coords.pop()
     # TODO: add snake_dx to head_x
@@ -144,32 +148,27 @@ def check_game_over():
         pygame.display.update()
         is_paused = True
         while is_paused:
-            for event in pygame,event.get():
+            for event in pygame.event.get():
                 reset_game_after_game_over(event)
                 check_end_game_after_game_over(event)
 
 
 def check_collisions():
     global score, apple_x, apple_y, apple_coord, body_coords
-    # TODO: if head_rect.colliderect(apple_rect)
-        # TODO: add 1 to the score
-        # TODO: call pick_up_sound.play()
-        # TODO: set apple_x to random.randint(0, WINDOW_WIDTH - SNAKE_SIZE)
-        # TODO: set apple_y to random.randint(0, WINDOW_HEIGHT - SNAKE_SIZE)
-        # TODO: set apple_coord to (apple_x, apple_y, SNAKE_SIZE, SNAKE_SIZE)
-        # TODO: call body_coords.append(head_coord)
-          pass # TODO: remove this pass when done.
+    if head_rect.colliderect(apple_rect):
+        pick_up_sound.play()
+        apple_x = random.randint(0, Window_Width - Snake_Size)
+        apple_y = random.randint(0, Window_Width - Snake_Size)
+        apple_coord = (apple_y, apple_x, Snake_Size, Snake_Size)
+        body_coords.append(head_coord)
 
 def blit_hud():
     display_surface.blit(title_text, title_rect)
     display_surface.blit(score_text, score_rect)
-    # TODO: call display_surface.blit(title_text, title_rect)
-    # TODO: call display_surface.blit(score_text, score_rect)
-    pass  # TODO: remove this pass when done.
 
 def blit_assets():
     for body in body_coords:
-        pygame.draw.rect(display_surface, DARKGREEN, body)\
+        pygame.draw.rect(display_surface, DARKGREEN, body)
         head_rect = pygame.draw.rect(display_surface, GREEN, head_coord)
         apple_rect = pygame.draw.rect(display_surface, RED,apple_coord)
 
